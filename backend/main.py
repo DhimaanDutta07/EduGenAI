@@ -1,14 +1,15 @@
+import sys
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
-from routes.chatbot import router as chatbot_router
-from routes.rag_reader import router as rag_router
-from routes.generator import router as generator_router
-import sys
-import os
 
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), ""))
+
+from backend.routes.chatbot import router as chatbot_router
+from backend.routes.rag_reader import router as rag_router
+from backend.routes.generator import router as generator_router
 
 app = FastAPI()
 
