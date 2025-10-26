@@ -507,7 +507,7 @@
       try {
         const formData = new FormData();
         formData.append("question", q);
-        const res = await fetch("http://127.0.0.1:8000/api/rag/query", {
+        const res = await fetch("https://edugenai-toih.onrender.com/api/rag/query", {
           method: "POST",
           body: formData
         });
