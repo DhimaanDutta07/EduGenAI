@@ -1,5 +1,8 @@
 fastapi
 uvicorn
-openai
 langchain
-...
+openai
+tiktoken
+pydantic
+python-multipart
+faiss-cpu
