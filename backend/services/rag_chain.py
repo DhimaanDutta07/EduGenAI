@@ -8,8 +8,8 @@ from langchain.chains import ConversationalRetrievalChain
 
 load_dotenv()
 cohere_api_key = os.getenv("COHERE_API_KEY")
-embeddings = CohereEmbeddings(model="embed-english-light-v3.0", cohere_api_key="-")
-llm = ChatCohere(model="command-xlarge-nightly", cohere_api_key="-")
+embeddings = CohereEmbeddings(model="embed-english-light-v3.0", cohere_api_key="W9T9D3DGjtqAEgPEAJlr0J8GWYMLDwSNm4EqYi3Y")
+llm = ChatCohere(model="command-xlarge-nightly", cohere_api_key="W9T9D3DGjtqAEgPEAJlr0J8GWYMLDwSNm4EqYi3Y")
 vectorstore = None
 memory = []
 
