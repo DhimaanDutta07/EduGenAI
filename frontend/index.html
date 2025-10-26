@@ -1,0 +1,511 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EduGenAI — Study Smarter</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #0a0a0a;
+      color: #f7e9d7;
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0a0a0a;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(#2b6cb0, #f7e9d7);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(#4a90e2, #fff);
+    }
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0a0a0a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    #preloader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader {
+      border: 4px solid #2b6cb0;
+      border-top: 4px solid #f7e9d7;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 2rem;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      max-width: 1200px;
+      margin: 0 auto;
+      border-bottom: 1px solid rgba(43, 108, 176, 0.2);
+    }
+    .brand {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2b6cb0;
+      letter-spacing: 1px;
+    }
+    .brand::before {
+      content: '✍️';
+      margin-right: 0.5rem;
+    }
+    nav {
+      display: flex;
+      gap: 1.5rem;
+    }
+    nav a {
+      color: #f7e9d7;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background: linear-gradient(to right, #2b6cb0, #f7e9d7);
+      transition: width 0.3s ease;
+    }
+    nav a:hover::after {
+      width: 100%;
+    }
+    nav a:hover {
+      color: #2b6cb0;
+    }
+    .hero {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: #f7e9d7;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+      color: #b0c4de;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.3s;
+    }
+    .cta-row {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeInUp 1s ease forwards;
+      animation-delay: 0.5s;
+    }
+    .btn {
+      padding: 0.8rem 1.8rem;
+      font-size: 1rem;
+      text-decoration: none;
+      border-radius: 25px;
+      background: linear-gradient(45deg, #2b6cb0, #f7e9d7);
+      color: #0a0a0a;
+      font-weight: 500;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(43, 108, 176, 0.4);
+    }
+    .btn.outline {
+      background: none;
+      border: 2px solid #2b6cb0;
+      color: #2b6cb0;
+    }
+    .btn.outline:hover {
+      background: #2b6cb0;
+      color: #f7e9d7;
+    }
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      padding: 3rem 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .card {
+      background: rgba(20, 20, 20, 0.9);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid rgba(43, 108, 176, 0.2);
+      transition: transform 0.3s ease;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .card:nth-child(1) { animation-delay: 0.2s; }
+    .card:nth-child(2) { animation-delay: 0.4s; }
+    .card:nth-child(3) { animation-delay: 0.6s; }
+    .card:hover {
+      transform: translateY(-10px);
+    }
+    .card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: #2b6cb0;
+    }
+    .card p {
+      font-size: 0.95rem;
+      color: #b0c4de;
+      margin-bottom: 1rem;
+    }
+    .link {
+      color: #f7e9d7;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    .link:hover {
+      color: #2b6cb0;
+    }
+    .stats-section {
+      padding: 3rem 2rem;
+      background: rgba(10, 10, 10, 0.9);
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+    }
+    .stat {
+      text-align: center;
+      flex: 1;
+      min-width: 200px;
+      animation: fadeInUp 1s ease forwards;
+    }
+    .stat:nth-child(1) { animation-delay: 0.2s; }
+    .stat:nth-child(2) { animation-delay: 0.4s; }
+    .stat:nth-child(3) { animation-delay: 0.6s; }
+    .stat h4 {
+      font-size: 2rem;
+      color: #2b6cb0;
+      margin-bottom: 0.5rem;
+    }
+    .stat p {
+      font-size: 1rem;
+      color: #b0c4de;
+    }
+    .footer {
+      padding: 2rem;
+      text-align: center;
+      background: rgba(10, 10, 10, 0.95);
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .footer span {
+      font-size: 1rem;
+      color: #b0c4de;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .social-links a {
+      color: #f7e9d7;
+      font-size: 1.5rem;
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+    .social-links a:hover {
+      transform: scale(1.2);
+      color: #2b6cb0;
+    }
+    #back-to-top {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: linear-gradient(45deg, #2b6cb0, #f7e9d7);
+      color: #0a0a0a;
+      padding: 0.8rem;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      text-decoration: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    #back-to-top.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+    #back-to-top:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(43, 108, 176, 0.3);
+    }
+    #quiz-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(10, 10, 10, 0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+    }
+    #quiz-modal.active {
+      display: flex;
+    }
+    .quiz-content {
+      background: rgba(20, 20, 20, 0.9);
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 450px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid #2b6cb0;
+    }
+    .quiz-content h3 {
+      font-size: 1.5rem;
+      color: #2b6cb0;
+      margin-bottom: 1rem;
+    }
+    .quiz-content input {
+      margin: 1rem 0;
+      padding: 0.8rem;
+      width: 100%;
+      border: 1px solid #2b6cb0;
+      border-radius: 8px;
+      background: #0a0a0a;
+      color: #f7e9d7;
+      font-size: 1rem;
+    }
+    .quiz-content button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      background: #2b6cb0;
+      color: #f7e9d7;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .quiz-content button:hover {
+      background: #f7e9d7;
+      color: #0a0a0a;
+    }
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .particle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      color: #2b6cb0;
+      font-size: 14px;
+      animation: moveParticle 7s linear infinite;
+    }
+    @keyframes moveParticle {
+      0% { transform: translateY(100vh); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(0); opacity: 0; }
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .hero p { font-size: 1rem; }
+      .nav { flex-direction: column; gap: 1rem; padding: 1rem; }
+      .cta-row { flex-direction: column; gap: 1rem; }
+      .features { grid-template-columns: 1fr; padding: 2rem; }
+      .stats-section { flex-direction: column; gap: 1.5rem; }
+      .footer { padding: 1.5rem; }
+      .social-links a { font-size: 1.3rem; }
+    }
+  </style>
+</head>
+<body>
+  <div id="preloader"><div class="loader"></div></div>
+  <div id="progress-bar"></div>
+  <div class="particles" id="particles"></div>
+  <header class="nav">
+    <div class="brand">EduGenAI</div>
+    <nav>
+      <a href="chatbot.html">Study Chatbot</a>
+      <a href="rag.html">Document Q&A</a>
+      <a href="generator.html">Essay & Notes</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>EduGenAI: Your Study Sidekick</h1>
+      <p>Chat, analyze notes, or generate study tools with AI that gets you.</p>
+      <div class="cta-row">
+        <a class="btn" href="chatbot.html">Chat Now</a>
+        <a class="btn outline" href="rag.html">Analyze Notes</a>
+        <a class="btn outline" href="generator.html">Create Content</a>
+        <a class="btn" href="#" id="quiz-btn">Take a Quiz</a>
+      </div>
+    </section>
+    <section class="features">
+      <article class="card">
+        <h3>Study Chatbot</h3>
+        <p>Ask anything and get clear, step-by-step answers to ace your studies.</p>
+        <a href="chatbot.html" class="link">Start Learning</a>
+      </article>
+      <article class="card">
+        <h3>Document Q&A</h3>
+        <p>Upload notes or PDFs and get instant answers from your materials.</p>
+        <a href="rag.html" class="link">Try Now</a>
+      </article>
+      <article class="card">
+        <h3>Essay & Notes Generator</h3>
+        <p>Generate essays, summaries, or quizzes tailored to your needs.</p>
+        <a href="generator.html" class="link">Create Now</a>
+      </article>
+    </section>
+    <section class="stats-section">
+      <div class="stat">
+        <h4>500K+</h4>
+        <p>Questions Answered</p>
+      </div>
+      <div class="stat">
+        <h4>4.8/5</h4>
+        <p>Average Rating</p>
+      </div>
+      <div class="stat">
+        <h4>10K+</h4>
+        <p>Daily Users</p>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <span>EduGenAI — Ace Your Studies</span>
+    <div class="social-links">
+      <a href="#" class="fab fa-github"></a>
+      <a href="#" class="fab fa-linkedin"></a>
+    </div>
+    <div>Developer: Dhimaan Dutta</div>
+  </footer>
+  <a href="#" id="back-to-top">↑</a>
+  <div id="quiz-modal">
+    <div class="quiz-content">
+      <h3>Quick Study Quiz</h3>
+      <p id="quiz-question"></p>
+      <input type="text" id="quiz-answer" placeholder="Your answer...">
+      <button id="submit-quiz">Submit</button>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('preloader').classList.add('hidden');
+      }, 800);
+    });
+    const backToTop = document.getElementById('back-to-top');
+    window.addEventListener('scroll', () => {
+      const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+      document.getElementById('progress-bar').style.width = scrollPercent + '%';
+      if (window.scrollY > 300) {
+        backToTop.classList.add('visible');
+      } else {
+        backToTop.classList.remove('visible');
+      }
+    });
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.style.transform = 'scale(0.95)';
+        setTimeout(() => { btn.style.transform = 'scale(1)'; }, 100);
+      });
+    });
+    const particlesContainer = document.getElementById('particles');
+    const icons = ['📚', '✏️', '💡', '📝'];
+    for (let i = 0; i < 15; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 7 + 's';
+      particlesContainer.appendChild(particle);
+    }
+    const quizBtn = document.getElementById('quiz-btn');
+    const quizModal = document.getElementById('quiz-modal');
+    const quizQuestion = document.getElementById('quiz-question');
+    const quizAnswer = document.getElementById('quiz-answer');
+    const submitQuiz = document.getElementById('submit-quiz');
+    const questions = [
+      { q: 'What is the formula for the area of a circle?', a: 'πr²' },
+      { q: 'Who wrote "Pride and Prejudice"?', a: 'Jane Austen' },
+      { q: 'What gas do plants absorb during photosynthesis?', a: 'Carbon Dioxide' }
+    ];
+    quizBtn.addEventListener('click', () => {
+      quizModal.classList.add('active');
+      const q = questions[Math.floor(Math.random() * questions.length)];
+      quizQuestion.textContent = q.q;
+      quizAnswer.value = '';
+      quizAnswer.focus();
+    });
+    submitQuiz.addEventListener('click', () => {
+      const q = questions.find(q => q.q === quizQuestion.textContent);
+      alert(quizAnswer.value.toLowerCase() === q.a.toLowerCase() ? 'Nailed It!' : 'Try Again!');
+      quizModal.classList.remove('active');
+    });
+  </script>
+</body>
+</html>
